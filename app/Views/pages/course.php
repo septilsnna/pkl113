@@ -10,9 +10,9 @@ session_start();
 
 <div class="row align-items-center">
     <?php for ($i = 0; $i <= count($course) - 1; $i++) : ?>
-    <div class="col-sm-4 py-3 px-3">
+    <div class="col-md-4 my-3">
         <div class="card text-center" style="border-color: #32a852; background-color:#dbffe5">
-            <div class="card-body">
+            <div class="card-body py-4">
                 <h5 class="card-title"><?= $course[$i][0]['nama_matkul']; ?></h5>
                 <a href="../Home/meetings/<?= $course[$i][0]['id'] ?>" class="btn btn-block"
                     style="background-color: #32a852; color:white">Lihat Pertemuan</a>

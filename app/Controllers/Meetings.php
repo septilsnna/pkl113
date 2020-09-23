@@ -8,6 +8,8 @@ date_default_timezone_set("Asia/Bangkok");
 use App\Models\Form05Model;
 use App\Models\Form06Model;
 use App\Models\CourseModel;
+use DateInterval;
+use DateTime;
 
 class Meetings extends BaseController
 {
@@ -42,7 +44,14 @@ class Meetings extends BaseController
 
         $now = date("Y-m-d H:i:s");
         $start = $form05[0]['hari_tanggal'];
-        $end = date("Y-m-d H:i:s", strtotime('+' . ($course[0]['jml_sks'] * 50) . ' minutes', strtotime($form05[0]['hari_tanggal'])));
+        $wkt = explode(':', $form05[0]['batas_presensi']);
+        $end = '';
+        if ($form05[0]['batas_presensi'] == '00:00:00') {
+            $end = date("Y-m-d H:i:s", strtotime('+' . ($course[0]['jml_sks'] * 50) . ' minutes', strtotime($start)));
+        } else {
+            $date = date('Y-m-d', strtotime($form05[0]['hari_tanggal']));
+            $end = date('Y-m-d H:i:s', strtotime('+' . (int)$wkt[0] . ' hour +' . (int)$wkt[1] . ' minutes', strtotime($date)));
+        }
 
         // cek presensi mhs, kalo != null berarti udah presensi, kalo == null berarti blm presensi
         $presence = $this->form06Model->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas'], 'id_mhs' => $_SESSION['username']))->findAll();
@@ -150,6 +159,7 @@ class Meetings extends BaseController
             'id_kelas' => $_SESSION['id_kelas'],
             'id_matkul' => $id_matkul[0]['id_matkul'],
             'hari_tanggal' => $this->request->getVar('hari_tanggal'),
+            'batas_presensi' => $this->request->getVar('batas_presensi'),
             'pokok_bahasan' => $this->request->getVar('pokok_bahasan'),
             'created_at' => date("Y-m-d H:i:s")
         ];
@@ -174,7 +184,7 @@ class Meetings extends BaseController
             'id_matkul' => $id_matkul[0]['id_matkul'],
             'id_mhs' => $_SESSION['username'],
             'nama_mhs' => $_SESSION['nama_user'],
-            'updated_at' => null
+            'created_at' => date("Y-m-d H:i:s"),
 
         ];
 

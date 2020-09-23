@@ -116,21 +116,15 @@ class Home extends BaseController
 			'id_pj' => $pj[0]['username']
 		];
 
-		//return view('pages/meetings', $data);
+		echo view('pages/meetings', $data);
 
-		if ($course[0]['id_pj'] == null) {		// kalo pj nya belom ada
-			if ($_SESSION['role'] == "1") {		// dosen akan diarahkan kembali ke course
-				return view('pages/meetings_error', $data);
-			} else {							// mhs akan ditawarin mau jadi pj engga
-				echo view('pages/meetings_error', $data);
+		if ($_SESSION['role'] == "2") {
+			if ($course[0]['id_pj'] == null) {
 				return view('button/pj_button');
 			}
-		} else {								// kalo pj nya udah ada
-			if ($_SESSION['role'] == "1") {
-				echo view('pages/meetings', $data);
+		} else {
+			if ($course[0]['id_pj'] != null) {
 				return view('button/add_button');
-			} else {
-				return view('pages/meetings', $data);
 			}
 		}
 	}

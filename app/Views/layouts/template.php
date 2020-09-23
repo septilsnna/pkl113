@@ -8,15 +8,18 @@
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <title>Our Web</title>
     <nav class="navbar sticky-top navbar-expand-lg navbar-light" style="background-color: #e1fae8;">
-        <a class="navbar-brand px-5 mx-3" href="/Home/index">Presensi</a>
+        <a class="navbar-brand px-3" href="/Home/index">Presensi</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <div class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                    <a class="nav-link dropdown-toggle px-3" data-toggle="dropdown" href="#" role="button"
                         aria-haspopup="true" aria-expanded="false">Selamat Datang <?= $_SESSION['nama_user']; ?></a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/Home/logout"
-                            style="background-color: #2d964a; color: white;">Logout</a>
+                    <div class="dropdown-menu" style="border: none; padding:15px; background-color: #e1fae8;">
+                        <a class="dropdown-item" href="/Home/logout" style="background-color: #e1fae8;">Logout</a>
                     </div>
                 </li>
             </div>

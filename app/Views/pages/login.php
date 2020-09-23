@@ -14,46 +14,40 @@ session_start();
 </head>
 
 <body style="background-color: #dbffe5;">
-    <div class="container">
-        <div class="container my-5 py-5">
-            <div class="container-fluid my-5">
-                <div class="row align-items-center">
-                    <div class="col-7">
-                        <h2>Selamat Datang<br>di layanan presensi<br>Universitas Negeri Jakarta</h2>
-                        <img src="/img/Logo-unj.png" style="max-width:40%;" class="rounded float-left mt-3" alt="...">
-                    </div>
-                    <div class="col-5">
-                        <div class="card align-items-center" style="background-color: #32a852;">
-                            <div class="card-body">
-                                <h3 style="color: white;" class="mb-4 text-center"><?= $title; ?></h3>
-                                <form action="../Home/login" method="post">
-                                    <?= csrf_field(); ?>
-                                    <div class="form-group row">
-                                        <label for="username" class="col-sm-4 col-form-label"
-                                            style="color: white">Username:
-                                        </label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control" id="username" name="username"
-                                                autofocus required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="password" class="col-sm-4 col-form-label"
-                                            style="color: white">Password</label>
-                                        <div class="col-sm-7">
-                                            <input type="password" class="form-control" id="password" name="password"
-                                                required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-7 offset-md-4">
-                                            <button type="submit" class="btn btn-block"
-                                                style="background-color: #2d964a; color: white">Masuk</button>
-                                        </div>
-                                    </div>
-                                </form>
+    <div class="container my-5">
+        <div class="row align-items-center">
+            <div class="col-md-7 my-5">
+                <h2>Selamat Datang<br>di layanan presensi<br>Universitas Negeri Jakarta</h2>
+                <img src="/img/Logo-unj.png" style="max-width:40%;" class="rounded float-left mt-3" alt="...">
+            </div>
+            <div class="col-md-5 mb-5">
+                <div class="card align-items-center" style="background-color: #32a852;">
+                    <div class="card-body">
+                        <h3 style="color: white;" class="mb-4 text-center"><?= $title; ?></h3>
+                        <form action="../Home/login" method="post">
+                            <?= csrf_field(); ?>
+                            <div class="form-group row">
+                                <label for="username" class="col-sm-4 col-form-label" style="color: white">Username:
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="username" name="username" autofocus
+                                        required>
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group row">
+                                <label for="password" class="col-sm-4 col-form-label"
+                                    style="color: white">Password</label>
+                                <div class="col-sm-7">
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-7 offset-md-4">
+                                    <button type="submit" class="btn btn-block"
+                                        style="background-color: #2d964a; color: white">Masuk</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

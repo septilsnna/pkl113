@@ -9,20 +9,33 @@ session_start();
 <h2 class="py-3"><?= $title; ?> Ke-<?= $_SESSION['id_form05']; ?></h2>
 <form action="../Meetings/save_meeting" method="post">
     <?= csrf_field(); ?>
-    <div class="form-group row">
-        <label for="hari_tanggal" class="col-sm-2 col-form-label">Hari/Tanggal:</label>
-        <div class="col-sm-10">
+    <div class="form-group row px-3">
+        <div class="col-md-8 py-2">
+            <label for=" hari_tanggal">Hari/Tanggal</label>
             <input type="datetime-local" class="form-control" id="hari_tanggal" name="hari_tanggal" required>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="pokok_bahasan" class="col-sm-2 col-form-label">Pokok Bahasan:</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="pokok_bahasan" name="pokok_bahasan" required>
+        <div class="col-md-8 py-2">
+            <label for="pokok_bahasan">Pokok Bahasan</label>
+            <input type="text" class="form-control" id="pokok_bahasan" name="pokok_bahasan"
+                placeholder="Materi yang akan dibahas" required>
         </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-md-7 offset-md-5">
+        <div class="col-md-8 py-2">
+            <label for="batas_presensi">Batas Waktu Presensi <br><small style="color: red;">Secara default, sistem akan
+                    mengatur
+                    batas waktu presensi yaitu 50 menit dikalikan dengan jumlah sks. Atau Anda dapat memasukan
+                    waktu
+                    berakhirnya presensi secara manual dibawah ini</small></label>
+            <input type="time" class="form-control" id="batas_presensi" name="batas_presensi"
+                placeholder="Dalam waktu jam dan menit">
+            <!--<div class="form-check pt-2">
+                <input class="form-check-input" type="radio" name="batas_presensi" id="batas_presensi_default"
+                    value="default">
+                <label class="form-check-label" for="batas_presensi_default">
+                    Sesuai waktu berakhirnya sks
+                </label>
+            </div>-->
+        </div>
+        <div class="col-md-7 py-4">
             <button type="submit" class="btn btn-block"
                 style="background-color: #32a852; color:white">Tambahkan!</button>
         </div>

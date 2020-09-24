@@ -1,5 +1,5 @@
 <div class="container">
-    <form action="/Meetings/save_presence" method="post">
+    <form action="/Config/save_presence" method="post">
         <?= csrf_field(); ?>
         <div class="row">
             <div class="col">

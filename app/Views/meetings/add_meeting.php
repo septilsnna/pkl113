@@ -7,7 +7,7 @@ session_start();
 <?= $this->section('content'); ?>
 
 <h2 class="py-3"><?= $title; ?> Ke-<?= $_SESSION['id_form05']; ?></h2>
-<form action="../Meetings/save_meeting" method="post">
+<form action="../Config/save_meeting" method="post">
     <?= csrf_field(); ?>
     <div class="form-group row px-3">
         <div class="col-md-8 py-2">

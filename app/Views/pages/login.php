@@ -23,26 +23,26 @@ session_start();
             <div class="col-md-5 mb-5">
                 <div class="card align-items-center" style="background-color: #32a852;">
                     <div class="card-body">
-                        <h3 style="color: white;" class="mb-4 text-center"><?= $title; ?></h3>
-                        <form action="../Home/login" method="post">
+                        <h3 style="color: white;" class="text-center">Silahkan Login</h3>
+                        <form action="/Config/login/<?= $data['id']; ?>" method="post">
                             <?= csrf_field(); ?>
                             <div class="form-group row">
-                                <label for="username" class="col-sm-4 col-form-label" style="color: white">Username:
-                                </label>
-                                <div class="col-sm-7">
+                                <div class="col-md-12 py-2">
+                                    <label for="username" style="color: white">Username:
+                                    </label>
                                     <input type="text" class="form-control" id="username" name="username" autofocus
                                         required>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="password" class="col-sm-4 col-form-label"
-                                    style="color: white">Password</label>
-                                <div class="col-sm-7">
+                                <div class="col-md-12 py-2">
+                                    <label for="password" style="color: white">Password</label>
                                     <input type="password" class="form-control" id="password" name="password" required>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-7 offset-md-4">
+                                <div class="col-md-12 py-2">
+                                    <label for="securid" style="color: white">Pertanyaan Keamanan</label>
+                                    <small for="securid" style="color: white">Berapakah <?= $data['quest']; ?>?</small>
+                                    <input type="number" class="form-control" id="securid" name="securid" required>
+                                </div>
+                                <div class="col-md-7 offset-md-4 py-2">
                                     <button type="submit" class="btn btn-block"
                                         style="background-color: #2d964a; color: white">Masuk</button>
                                 </div>

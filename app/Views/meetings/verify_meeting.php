@@ -4,7 +4,7 @@ session_start();
 
 <div class="container">
     <p class="text-center">Jumlah Mahasiswa yang hadir: <?= $form05[0]['jml_mhs_hadir']; ?></p>
-    <form action="/Meetings/verify_meeting" method="post">
+    <form action="/Config/verify_meeting" method="post">
         <?= csrf_field(); ?>
         <div class="form-group row">
             <div class="col">

@@ -8,8 +8,6 @@ date_default_timezone_set("Asia/Bangkok");
 use App\Models\Form05Model;
 use App\Models\Form06Model;
 use App\Models\CourseModel;
-use DateInterval;
-use DateTime;
 
 class Meetings extends BaseController
 {
@@ -26,7 +24,7 @@ class Meetings extends BaseController
 
     public function meeting_detail($param)
     {
-        if ($_SESSION['username'] == null) {
+        if ($_SESSION['auth'] == null) {
             return redirect()->to('../Home/index');
         }
 
@@ -136,7 +134,7 @@ class Meetings extends BaseController
 
     public function add_meeting()
     {
-        if ($_SESSION['username'] == null) {
+        if ($_SESSION['auth'] == null) {
             return redirect()->to('../Home/index');
         }
 
@@ -150,72 +148,6 @@ class Meetings extends BaseController
         return view('meetings/add_meeting', $data);
     }
 
-    public function save_meeting()
-    {
-        $id_matkul = $this->courseModel->where('id', $_SESSION['id_kelas'])->findAll();
-
-        $data = [
-            'id_form05' => $_SESSION['id_form05'],
-            'id_kelas' => $_SESSION['id_kelas'],
-            'id_matkul' => $id_matkul[0]['id_matkul'],
-            'hari_tanggal' => $this->request->getVar('hari_tanggal'),
-            'batas_presensi' => $this->request->getVar('batas_presensi'),
-            'pokok_bahasan' => $this->request->getVar('pokok_bahasan'),
-            'created_at' => date("Y-m-d H:i:s")
-        ];
-
-        $this->form05Model->insert($data);
-
-        return redirect()->to('/Home/meetings/' . $_SESSION['id_kelas']);
-    }
-
-    public function set_presence()
-    {
-        echo "Set Presence";
-    }
-
-    public function save_presence()
-    {
-        $id_matkul = $this->courseModel->where('id', $_SESSION['id_kelas'])->findAll();
-
-        $data = [
-            'id_form05' => (int)$_SESSION['id_form05'],
-            'id_kelas' => $_SESSION['id_kelas'],
-            'id_matkul' => $id_matkul[0]['id_matkul'],
-            'id_mhs' => $_SESSION['username'],
-            'nama_mhs' => $_SESSION['nama_user'],
-            'created_at' => date("Y-m-d H:i:s"),
-
-        ];
-
-        $this->form06Model->insert($data);
-
-        return redirect()->to(base_url('/Meetings/meeting_detail/' . $_SESSION['id_form05']));
-    }
-
-    public function verify_presence()
-    {
-        $mahasiswa = $_POST['mahasiswa'];
-
-        foreach ($mahasiswa as $mhs) {
-            $this->form06Model
-                ->where(array('id_form05' => $_SESSION['id_form05'], 'id_kelas' => $_SESSION['id_kelas'], 'id_mhs' => $mhs))
-                ->set(['updated_at' => date("Y-m-d H:i:s")])
-                ->update();
-        }
-
-        return redirect()->to('/Home/meetings/' . $_SESSION['id_kelas']);
-    }
-
-    public function verify_meeting()
-    {
-        $this->form05Model
-            ->where(array('id_form05' => $_SESSION['id_form05'], 'id_kelas' => $_SESSION['id_kelas']))
-            ->set(['updated_at' => date("Y-m-d H:i:s")])
-            ->update();
-
-        return redirect()->to('/Home/meetings/' . $_SESSION['id_kelas']);
-    }
     //--------------------------------------------------------------------
 
 }

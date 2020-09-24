@@ -5,7 +5,7 @@ session_start();
 <div class="container">
     <p>Jumlah Mahasiswa yang hadir: <?= count($form06); ?></p>
     <p>Daftar Mahasiswa yang hadir:</p>
-    <form action="/Meetings/verify_presence" method="post">
+    <form action="/Config/verify_presence" method="post">
         <?= csrf_field(); ?>
         <table class="table table-borderless">
             <thead>

@@ -15,8 +15,16 @@ session_start();
         <table class="table table-borderless">
             <tbody>
                 <tr>
-                    <th scope="row" style="color:#32a852">Tanggal dan waktu mulai</th>
-                    <td><?= $form05[0]['hari_tanggal']; ?></td>
+                    <th scope="row" style="color:#32a852">Tanggal</th>
+                    <td><?= $tanggal; ?></td>
+                </tr>
+                <tr>
+                    <th scope="row" style="color:#32a852">Waktu Mulai</th>
+                    <td><?= $form05[0]['jam_mulai']; ?></td>
+                </tr>
+                <tr>
+                    <th scope="row" style="color:#32a852">Waktu Selesai</th>
+                    <td><?= $form05[0]['jam_selesai']; ?></td>
                 </tr>
                 <tr>
                     <th scope="row" style="color:#32a852">Batas Waktu Presensi</th>

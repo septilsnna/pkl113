@@ -19,7 +19,7 @@
                     <a class="nav-link dropdown-toggle px-3" data-toggle="dropdown" href="#" role="button"
                         aria-haspopup="true" aria-expanded="false">Selamat Datang <?= $_SESSION['name']; ?></a>
                     <div class="dropdown-menu" style="border: none; padding:15px; background-color: #e1fae8;">
-                        <a class="dropdown-item" href="/Home/logout" style="background-color: #e1fae8;">Logout</a>
+                        <a class="dropdown-item" href="/config/logout" style="background-color: #e1fae8;">Logout</a>
                     </div>
                 </li>
             </div>

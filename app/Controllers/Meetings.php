@@ -22,12 +22,102 @@ class Meetings extends BaseController
         $this->courseModel = new CourseModel();
     }
 
-    public function meeting_detail($param)
+    public function index($param)               // SELESAI
+    {
+        if ($_SESSION['auth'] == null) {        // user belum login -> base_url() -> controller home
+            return redirect()->to('/');
+        } else {                                // user sudah login -> halaman pages/meetings
+            $_SESSION['id_kelas'] = $param;
+            $data1 = $_SESSION['course'];
+            $course1 = [];
+
+            // mengambil semua data matkul sesuai id_kelas
+            foreach ($data1 as $d) {
+                if ($d['kelas_matkul'] == $param) {
+                    $course1 = $d;
+                }
+            }
+
+            $nidn =  explode('-', $course1['dosen_matkul']);                                // nidn
+            $nama_dosen = explode('-', trim($course1['dosen_matkul'], " \t<br/>."));        // nama_dosen
+
+            // mengambil data hari, jam mulai, dan jam selesai, sesuai id_kelas di web-services
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://103.8.12.212:36880/siakad_api/api/as400/penjadwalanDosen/" . $nidn[0] . "/113/" . $_SESSION['auth'],
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            $res = json_decode($response, true);
+
+            // mengambil semua data matkul sesuai id_kelas
+            foreach ($res['isi'] as $d) {
+                if ($d['kelas'] == $param) {
+                    $course1['hari'] = $d['hari'];
+                    $course1['awal'] = $d['awal'];
+                    $course1['akhir'] = $d['akhir'];
+                }
+            }
+
+            // menyimpan data mata kuliah ke database
+            $ins = [
+                'id' => $course1['kelas_matkul'],
+                'id_matkul' => $course1['kode_matkul'],
+                'nama_matkul' => $course1['nama__matkul'],
+                'nama_dosen' => $nama_dosen[1],
+                'jml_sks' => $course1['arcmk_matkul'],
+                'hari' => $course1['hari'],
+                'jam_mulai' => $course1['awal'],
+                'jam_selesai' => $course1['akhir']
+            ];
+            $this->courseModel->insert($ins);
+
+            // mengambil data form05 dan course untuk ditampilkan di halaman meetings
+            $form05 = $this->form05Model->where('id_kelas', $param)->findAll();
+            $course = $this->courseModel->where('id', $param)->findAll();
+            $pj_nama = $course[0]['nama_pj'];
+            $pj_id = $course[0]['id_pj'];
+
+            $data = [
+                'title' => "Daftar Pertemuan",
+                'course' => $course,
+                'form05' => $form05,
+                'nama_pj' => $pj_nama,
+                'id_pj' => $pj_id,
+            ];
+
+            echo view('pages/meetings', $data);
+
+            if ($_SESSION['mode'] == 9) {               // login sebagai mahasiswa
+                if ($course[0]['id_pj'] == null) {
+                    // echo view form05 yang aktif saja
+                    return view('button/pj_button');
+                }
+            } else {                                    // login bukan sebagai mahasiswa
+                if ($course[0]['id_pj'] != null) {
+                    // echo view semua form05
+                    return view('button/add_button');
+                }
+            }
+        }
+    }
+
+    public function detail($param)
     {
         if ($_SESSION['auth'] == null) {
-            return redirect()->to('../Home/index');
+            return redirect()->to('/');
         }
 
+        // mengambil semua data yang sesuai dengan id_form05 pada database
         $form05 = $this->form05Model->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas']))->findAll();
         $form06 = $this->form06Model->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas']))->findAll();
         $course = $this->courseModel->where('id', $_SESSION['id_kelas'])->findAll();
@@ -35,21 +125,37 @@ class Meetings extends BaseController
         $_SESSION['id_form05'] = $param;
 
         // mengupdate jumlah mahasiswa yang hadir
-        $this->form05Model
-            ->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas']))
-            ->set(['jml_mhs_hadir' => (int)count($form06)])
-            ->update();
+        // $this->form05Model
+        //     ->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas']))
+        //     ->set(['jml_mhs_hadir' => (int)count($form06)])
+        //     ->update();
 
+        // menghitung waktu seputar presensi
         $now = date("Y-m-d H:i:s");
-        $start = $form05[0]['hari_tanggal'];
+        $start = date_format(date_create($form05[0]['tanggal'] . " " . $form05[0]['jam_mulai']), "Y-m-d H:i:s");
         $wkt = explode(':', $form05[0]['batas_presensi']);
         $end = '';
         if ($form05[0]['batas_presensi'] == '00:00:00') {
-            $end = date("Y-m-d H:i:s", strtotime('+' . ($course[0]['jml_sks'] * 50) . ' minutes', strtotime($start)));
+            // $end = date("Y-m-d H:i:s", strtotime('+' . ($course[0]['jml_sks'] * 50) . ' minutes', strtotime($start)));       // kalo offline
+            $end = date("Y-m-d H:i:s", strtotime('+30 minutes', strtotime($start)));                                            // kalo online
         } else {
-            $date = date('Y-m-d', strtotime($form05[0]['hari_tanggal']));
+            $date = date('Y-m-d', strtotime($form05[0]['jam_mulai']));
             $end = date('Y-m-d H:i:s', strtotime('+' . (int)$wkt[0] . ' hour +' . (int)$wkt[1] . ' minutes', strtotime($date)));
         }
+
+        // tanggal bulan tahun, pertemuan
+        $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $tgl = explode('-', $form05[0]['tanggal']);
+
+        // menyiapkan data yang akan disisipkan
+        $data = [
+            'title' => 'Detail Pertemuan',
+            'form05' => $form05,
+            'form06' => $form06,
+            'nama_matkul' => $course[0]['nama_matkul'],
+            'tanggal' => (int)$tgl[2] . ' ' . $bulan[(int)$tgl[1]] . ' ' . $tgl[0],
+            'end' => $end,
+        ];
 
         // cek presensi mhs, kalo != null berarti udah presensi, kalo == null berarti blm presensi
         $presence = $this->form06Model->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas'], 'id_mhs' => $_SESSION['username']))->findAll();
@@ -63,14 +169,6 @@ class Meetings extends BaseController
         // cek mhs pertama yg presensi
         $first = $this->form06Model->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas']))->findAll();
         $pj = $this->form06Model->where(array('id_form05' => $param, 'id_kelas' => $_SESSION['id_kelas'], 'id_mhs' => $course[0]['id_pj']))->findAll();
-
-        $data = [
-            'title' => 'Detail Pertemuan',
-            'form05' => $form05,
-            'form06' => $form06,
-            'nama_matkul' => $course[0]['nama_matkul'],
-            'end' => $end,
-        ];
 
         if ($_SESSION['role'] == "1") {                     // dosen
             if ($now < $start) {                            // kalo belom mulai presensi

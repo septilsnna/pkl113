@@ -15,7 +15,7 @@ session_start();
             <div class="card-body py-4">
                 <h5 class="card-title"><?= $data[$i]['nama__matkul']; ?></h5>
                 <p class="card-title"><?= $data[$i]['kelas_matkul']; ?></p>
-                <a href="../Home/meetings/<?= $data[$i]['kelas_matkul'] ?>" class="btn btn-block"
+                <a href="/meetings/index/<?= $data[$i]['kelas_matkul'] ?>" class="btn btn-block"
                     style="background-color: #32a852; color:white">Lihat Pertemuan</a>
             </div>
         </div>

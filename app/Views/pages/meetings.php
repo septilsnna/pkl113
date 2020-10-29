@@ -14,9 +14,9 @@
     <?php else : ?>
     <p>PJ : <?= $nama_pj; ?> (<?= $id_pj; ?>)</p>
 </div>
-<div class="col-md-7">
+<div class="col-md-7 mb-5">
     <?php foreach ($form05 as $f) : ?>
-    <a href="/Meetings/meeting_detail/<?= $f['id_form05'] ?>" type="button" class="btn btn-lg btn-block"
+    <a href="/meetings/detail/<?= $f['id_form05'] ?>" type="button" class="btn btn-lg btn-block"
         style="border-color: #32a852;">Pertemuan
         Ke-<?= $f['id_form05']; ?></a>
     <?php endforeach; ?>

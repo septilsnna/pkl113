@@ -139,8 +139,7 @@ class Meetings extends BaseController
             // $end = date("Y-m-d H:i:s", strtotime('+' . ($course[0]['jml_sks'] * 50) . ' minutes', strtotime($start)));       // kalo offline
             $end = date("Y-m-d H:i:s", strtotime('+30 minutes', strtotime($start)));                                            // kalo online
         } else {
-            $date = date('Y-m-d', strtotime($form05[0]['jam_mulai']));
-            $end = date('Y-m-d H:i:s', strtotime('+' . (int)$wkt[0] . ' hour +' . (int)$wkt[1] . ' minutes', strtotime($date)));
+            $end = date_format(date_create($form05[0]['tanggal'] . " " . $form05[0]['batas_presensi']), "Y-m-d H:i:s");
         }
 
         // tanggal bulan tahun, pertemuan

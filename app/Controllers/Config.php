@@ -50,23 +50,34 @@ class Config extends BaseController
         return redirect()->to('/');
     }
 
-    public function save_meeting()
+    public function edit_meeting()
     {
-        $id_matkul = $this->courseModel->where('id', $_SESSION['id_kelas'])->findAll();
+        // $id_matkul = $this->courseModel->where('id', $_SESSION['id_kelas'])->findAll();
 
-        $data = [
-            'id_form05' => $_SESSION['id_form05'],
-            'id_kelas' => $_SESSION['id_kelas'],
-            'id_matkul' => $id_matkul[0]['id_matkul'],
-            'hari_tanggal' => $this->request->getVar('hari_tanggal'),
-            'batas_presensi' => $this->request->getVar('batas_presensi'),
-            'pokok_bahasan' => $this->request->getVar('pokok_bahasan'),
-            'created_at' => date("Y-m-d H:i:s")
-        ];
+        // $data = [
+        //     'tanggal' => $this->request->getVar('hari_tanggal'),
+        //     'jam_mulai' => $this->request->getVar('jam_mulai'),
+        //     'jam_selesai' => $this->request->getVar('jam_selesai'),
+        //     'batas_presensi' => $this->request->getVar('batas_presensi'),
+        //     'pokok_bahasan' => $this->request->getVar('pokok_bahasan'),
+        // ];
 
-        $this->form05Model->insert($data);
+        // $this->form05Model->insert($data);
+        // $tanggal = date_format($this->request->getVar('tanggal'), "Y-m-d");
+        // var_dump($this->request->getVar('batas_presensi'));
+        $this->form05Model
+            ->where(array('id_form05' => $_SESSION['id_form05'], 'id_kelas' => $_SESSION['id_kelas']))
+            ->set([
+                'tanggal' => $this->request->getVar('tanggal'),
+                'jam_mulai' => $this->request->getVar('jam_mulai'),
+                'jam_selesai' => $this->request->getVar('jam_selesai'),
+                'batas_presensi' => $this->request->getVar('batas_presensi'),
+                'pokok_bahasan' => $this->request->getVar('pokok_bahasan'),
+                'status' => 1
+            ])
+            ->update();
 
-        return redirect()->to('/Home/meetings/' . $_SESSION['id_kelas']);
+        return redirect()->to('/meetings/detail/' . $_SESSION['id_form05']);
     }
 
     public function save_presence()
